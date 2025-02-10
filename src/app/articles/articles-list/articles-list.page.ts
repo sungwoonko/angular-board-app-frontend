@@ -20,7 +20,7 @@ export class ArticlesListPage implements OnInit {
   async ngOnInit() {
     try {
       const response = await this.articlesService.getAllArticles();
-      if(response.sucess) {
+      if(response.success) {
         this.articles = response.data;
       }else{
         console.error(response.message);
@@ -33,6 +33,6 @@ export class ArticlesListPage implements OnInit {
 
   //route Article detail
   viewArticle(id: number){
-    this.router.navigate([`${id}/detail`]);
+    this.router.navigate([`detail/${id}`]);
   }
 }
