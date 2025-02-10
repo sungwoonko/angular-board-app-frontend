@@ -1,0 +1,7 @@
+{
+  "name": "angular-board-app-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
