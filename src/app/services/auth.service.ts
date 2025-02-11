@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse } from '../common/api-response.interface';
-import { SignUpRequest } from '../common/sign-up-request.interface';
-import { SignInRequest } from '../common/sign-in-request.interface';
+import { ApiResponse } from '../models/common/api-response.interface';
+import { SignUpRequest } from '../models/auth/sign-up-request.interface';
+import { SignInRequest } from '../models/auth/sign-in-request.interface';
 
 @Injectable({
   providedIn: 'root'

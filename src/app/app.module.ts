@@ -4,8 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ArticlesModule } from './articles/articles.module';
-import { AuthModule } from './auth/auth.module';
+import { ArticlesModule } from 'src/app/pages/articles/articles.module';
 
 
 @NgModule({
@@ -14,8 +13,7 @@ import { AuthModule } from './auth/auth.module';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    ArticlesModule,
-    AuthModule,
+    ArticlesModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

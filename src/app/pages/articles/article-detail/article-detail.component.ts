@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Article } from 'src/app/common/article-response.interface';
-import { ArticlesService } from '../articles.service';
+import { Article } from 'src/app/models/articles/article-response.interface';
 import { ActivatedRoute } from '@angular/router';
+import { ArticlesService } from 'src/app/services/articles.service';
 
 @Component({
   selector: 'app-article-detail',
