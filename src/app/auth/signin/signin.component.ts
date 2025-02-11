@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
@@ -6,19 +8,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./signin.component.scss'],
   standalone: false
 })
-export class SigninComponent  implements OnInit {
+export class SigninComponent implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit() {}
 
-  onSignIn() {
+  async onSignIn() {
     const signInData = {
       email: this.email,
-      password: this.password
+      password: this.password,
     }
-    console.log('signInData',signInData)
+    console.log('signInData:', signInData);
+
+    try {
+      const response = await this.authService.signIn(signInData);
+      if (response.success) {
+        console.log(response);
+        this.router.navigate(['/']);
+      } else {
+        console.log('Sign In Failed', response.message);
+      }
+    } catch (error) {
+      console.log('Sign In Error', error);
+    }
   }
 }
