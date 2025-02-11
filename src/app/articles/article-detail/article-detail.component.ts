@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Article } from 'src/app/common/article-response.interface';
 import { ArticlesService } from '../articles.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-article-detail',
-  templateUrl: './article-detail.page.html',
-  styleUrls: ['./article-detail.page.scss'],
+  templateUrl: './article-detail.component.html',
+  styleUrls: ['./article-detail.component.scss'],
   standalone: false
 })
-export class ArticleDetailPage implements OnInit {
+export class ArticleDetailComponent implements OnInit {
   article: Article | undefined;
 
   constructor(

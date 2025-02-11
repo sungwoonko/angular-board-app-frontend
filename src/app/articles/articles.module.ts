@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ArticlesComponentRoutingModule } from './articles-routing.module';
+import { ArticlesRoutingModule } from './articles-routing.module';
 import { ArticlesListComponent } from './articles-list/articles-list.component';
 import { ArticleDetailComponent  } from './article-detail/article-detail.component';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   imports: [
-    ArticlesComponentRoutingModule,
+    ArticlesRoutingModule,
     IonicModule,
     CommonModule,
     FormsModule,
