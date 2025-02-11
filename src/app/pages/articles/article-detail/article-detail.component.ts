@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Article } from 'src/app/models/articles/article-response.interface';
 import { ActivatedRoute } from '@angular/router';
+import { ArticleResponse } from 'src/app/models/articles/article-response.interface';
 import { ArticlesService } from 'src/app/services/articles.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { ArticlesService } from 'src/app/services/articles.service';
   standalone: false
 })
 export class ArticleDetailComponent implements OnInit {
-  article: Article | undefined;
+  article: ArticleResponse | undefined;
 
   constructor(
     private articlesService: ArticlesService,
@@ -21,18 +21,26 @@ export class ArticleDetailComponent implements OnInit {
     await this.loadArticle();
   }
 
-  async loadArticle() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id')
-    if(id) {
-      try {
-        const response = await this.articlesService.getArticleById(+id);
-        this.article = response.data; 
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    }else{
-      console.error('Article id is null');
+  loadArticle() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      this.articlesService.getArticleById(+id).subscribe({
+        next: response => {
+          if (response.success) {
+            this.article = response.data;
+          } else {
+            console.error(response.message);
+          }
+        },
+        error: err => {
+          console.error('Error fetching article:', err);
+        },
+        complete: () => {
+          console.log('Fetching an article request completed.');
+        }
+      });
+    } else {
+      console.error('Article ID is null');
     }
   }
-
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -26,16 +26,20 @@ export class SigninComponent implements OnInit {
     }
     console.log('signInData:', signInData);
 
-    try {
-      const response = await this.authService.signIn(signInData);
-      if (response.success) {
-        console.log(response);
-        this.router.navigate(['/']);
-      } else {
-        console.log('Sign In Failed', response.message);
+    this.authService.signIn(signInData).subscribe({
+      next: response => {
+        if (response.success) {
+          this.router.navigate(['/']);
+        } else {
+          console.error('Sign In failed:', response.message);
+        }
+      },
+      error: err => {
+        console.error('Sign In error:', err);
+      },
+      complete: () => {
+        console.log('Sign In request completed.');
       }
-    } catch (error) {
-      console.log('Sign In Error', error);
-    }
+    });
   }
 }

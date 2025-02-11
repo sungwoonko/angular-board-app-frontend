@@ -1,5 +1,5 @@
-export interface Article {
-    id : number;
-    title : string;
-    contents : string;
-  }
+export interface ArticleResponse {
+  id: number;
+  title: string;
+  contents: string;
+}

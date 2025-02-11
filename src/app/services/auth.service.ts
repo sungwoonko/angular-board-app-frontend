@@ -1,69 +1,55 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse } from '../models/common/api-response.interface';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { SignUpRequest } from '../models/auth/sign-up-request.interface';
 import { SignInRequest } from '../models/auth/sign-in-request.interface';
+import { ApiResponse } from '../models/common/api-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api' // auth와 확인 필요
+  private apiUrl = 'http://localhost:3000/api';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  async signUp(signUpData: SignUpRequest): Promise<ApiResponse<void>> {
-    try {
-      console.log('signUpdata: ',signUpData)
-      const response = await fetch(`${this.apiUrl}/users`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(signUpData)});
+  signUp(signUpRequest: SignUpRequest): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.apiUrl}/users`, signUpRequest);
+  }
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log(errorText);
-        throw new Error(errorText)
-      }
+  signIn(signInRequest: SignInRequest): Observable<ApiResponse<void>> {
+    return new Observable<ApiResponse<void>>(observer => {
+      this.http.post<ApiResponse<void>>(`${this.apiUrl}/auth/signin`, signInRequest, { observe: 'response' })
+        .subscribe(response => {
+          this.saveJwtToken(response); // JWT 토큰 저장 로직 호출
+          const apiResponse = this.createApiResponse(response);
+          observer.next(apiResponse); // ApiResponse 반환
+          observer.complete();
+        }, error => {
+          const apiResponse: ApiResponse<void> = {
+            success: false,
+            statusCode: 500,
+            message: '서버 오류',
+            data: undefined
+          };
+          observer.error(apiResponse); // 에러 반환
+        });
+    });
+  }
 
-      const data = await response.json();
-      return data;
-      
-    } catch (error) {
-      console.error(error);
-      throw error
+  private saveJwtToken(response: any) {
+    const token = response.headers.get('Authorization');
+    if (token) {
+      localStorage.setItem('jwtToken', token); // JWT 토큰 저장
     }
   }
 
-  async signIn(signInData: SignInRequest): Promise<ApiResponse<void>> {
-    try {
-      console.log('signIndata: ',signInData)
-      const response = await fetch(`${this.apiUrl}/auth/signin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(signInData)});
-        
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log(errorText);
-        throw new Error(errorText)
-      }
-
-      // API 서버의 응답 헤더에서 JWT 토큰을 추출
-      const token = response.headers.get('Authorization');
-      if (token) {
-          localStorage.setItem('jwtToken', token); // 헤더에서 추출한 토큰을 클라이언트 localStorage에 저장
-      }
-
-      const data = await response.json();
-      return data;
-      
-    } catch (error) {
-      console.error(error);
-      throw error
-    }
+  private createApiResponse(response: any): ApiResponse<void> {
+    return {
+      success: response.ok,
+      statusCode: response.status,
+      message: response.ok ? '로그인 성공' : '로그인 실패',
+      data: undefined // 데이터는 없음
+    };
   }
 }

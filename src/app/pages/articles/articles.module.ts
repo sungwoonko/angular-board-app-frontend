@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { ArticlesRoutingModule } from './articles-routing.module';
 import { ArticlesListComponent } from './articles-list/articles-list.component';
-import { ArticleDetailComponent  } from './article-detail/article-detail.component';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { ArticleDetailComponent } from './article-detail/article-detail.component';
 
 @NgModule({
   imports: [
-    ArticlesRoutingModule,
-    IonicModule,
     CommonModule,
     FormsModule,
+    IonicModule,
+    ArticlesRoutingModule,
   ],
   declarations: [
     ArticlesListComponent,
-    ArticleDetailComponent
-
+    ArticleDetailComponent,
   ]
 })
-export class ArticlesModule { }
+export class ArticlesModule {}

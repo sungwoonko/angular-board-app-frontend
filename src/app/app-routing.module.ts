@@ -13,11 +13,11 @@ const routes: Routes = [
   },
   {
     path: 'articles',
-    loadChildren: () => import('src/app/pages/articles/articles.module').then( m => m.ArticlesModule)
+    loadChildren: () => import('./pages/articles/articles.module').then( m => m.ArticlesModule)
   },
   {
     path: 'auth',
-    loadChildren: () => import('src/app/pages/auth/auth.module').then( m => m.AuthModule)
+    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthModule)
   },
 ];
 

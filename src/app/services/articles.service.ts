@@ -1,52 +1,34 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse } from '../models/common/api-response.interface';
-import { Article } from '../models/articles/article-response.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiResponse } from '../models/common/api-response.interface';
+import { ArticleResponse } from '../models/articles/article-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticlesService {
-  private apiUrl = 'http://localhost:3000/api/articles'
+  private apiUrl = 'http://localhost:3000/api/articles';
 
-  constructor(private http: HttpClient){ }
+  constructor(private http: HttpClient) { }
 
-  getAllArticles(): Observable<ApiResponse<Article[]>>{
-    return this.http.get<ApiResponse<Article[]>>(`${this.apiUrl}`)
+  getAllArticles(): Observable<ApiResponse<ArticleResponse[]>> {
+    const token = localStorage.getItem('jwtToken'); // 로컬스토리지에서 JWT 토큰 가져오기
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : '' // JWT 토큰을 헤더에 포함
+    });
+
+    return this.http.get<ApiResponse<ArticleResponse[]>>(`${this.apiUrl}`, { headers });
   }
 
+  getArticleById(id: number): Observable<ApiResponse<ArticleResponse>> {
+    const token = localStorage.getItem('jwtToken'); // 로컬스토리지에서 JWT 토큰 가져오기
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : '' // JWT 토큰을 헤더에 포함
+    });
 
-
-  // async getAllArticles(): Promise<ApiResponse<Article[]>> {
-  //   try {
-  //     const response = await fetch(`${this.apiUrl}`);
-
-  //     if(!response.ok){
-  //       throw new Error('Network response was not ok');
-  //     }
-  //     const data: ApiResponse<Article[]> = await response.json();
-  //     return data;    
-  //   } catch (error) {
-  //     console.error('Fetch error',error)
-  //     throw error;
-  //   }
-
-  // }
-
-  async getArticleById(id: number): Promise<ApiResponse<Article>>{
-    try {
-      const response = await fetch(`${this.apiUrl}/${id}`);
-
-      if(!response.ok){
-        throw new Error('Network response was not ok');
-      }
-      const data: ApiResponse<Article> = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Fetch error',error)
-      throw error;
-    }
-
+    return this.http.get<ApiResponse<ArticleResponse>>(`${this.apiUrl}/${id}`, { headers });
   }
 }
